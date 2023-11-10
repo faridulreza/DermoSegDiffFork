@@ -2,7 +2,7 @@ einops
 ema_pytorch
 matplotlib
 numpy
-opencv
+opencv-python
 opencv_python_headless
 Pillow
 PyYAML
