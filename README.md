@@ -1,5 +1,7 @@
+# Modification of DermoSegDiff for lung tumor segmentation with LIDC dataset
 # DermoSegDiff: A Boundary-aware Segmentation Diffusion Model for Skin Lesion Delineation <br> <span style="float: right"><sub><sup>MICCAI 2023 PRIME Workshop</sub></sup></span>
 [![arXiv](https://img.shields.io/badge/arXiv-2309.00108-b31b1b.svg)](https://arxiv.org/abs/2308.02959)
+
 
 Skin lesion segmentation plays a critical role in the early detection and accurate diagnosis of dermatological conditions. Denoising Diffusion Probabilistic Models (DDPMs) have recently gained attention for their exceptional image-generation capabilities. Building on these advancements, we propose DermoSegDiff, a novel framework for skin lesion segmentation that incorporates boundary information during the learning process. Our approach introduces a novel loss function that prioritizes the boundaries during training, gradually reducing the significance of other regions. We also introduce a novel U-Net-based denoising network that proficiently integrates noise and semantic information inside the network. Experimental results on multiple skin segmentation datasets demonstrate the superiority of DermoSegDiff over existing CNN, transformer, and diffusion-based approaches, showcasing its effectiveness and generalization in various scenarios.
 <p align="center">
