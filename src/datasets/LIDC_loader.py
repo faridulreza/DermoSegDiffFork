@@ -221,7 +221,7 @@ class PrepareLIDC:
         
 
         imgs_dir = os.path.join(self.data_dir, "Image")
-        msks_dir = os.path.join(self.data_dir, "Masks")
+        msks_dir = os.path.join(self.data_dir, "Mask")
 
 
         meta = pd.read_csv(os.path.join(self.data_dir,'meta.csv'))
