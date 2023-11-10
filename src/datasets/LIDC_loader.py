@@ -252,7 +252,7 @@ class PrepareLIDC:
         imgs = []
         msks = []
         for img_path, mask_path in tqdm(zip(train_image_paths, train_mask_paths)):
-            img = self.__get_img_by_id(image_path)
+            img = self.__get_img_by_id(img_path)
             msk = self.__get_msk_by_id(mask_path)
 
             img = self.transforms["img"](img)
