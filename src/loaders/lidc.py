@@ -27,31 +27,51 @@ def get_lidc(config, logger=None, verbose=False):
 
     # ----------------- dataset --------------------
     if config["dataset"]["class_name"] == "LIDC_loader":
-
-        dataset = LIDC_loader(
+        tr_dataset = LIDC_loader(
+            mode="tr",
             data_dir=config["dataset"]["data_dir"],
             one_hot=False,
+            image_size=config["dataset"]["input_size"],
+            aug=tr_aug_transform,
             # aug=AUGT.get_aug_policy_3(),
             # transform=AUGT.get_spatial_transform(),
             img_transform=DT.get_forward_transform_img(),
             msk_transform=DT.get_forward_transform_msk(),
-            logger=logger
+            add_boundary_mask=config["dataset"]["add_boundary_mask"],
+            add_boundary_dist=config["dataset"]["add_boundary_dist"],
+            logger=logger,
+            data_scale=config["dataset"]["data_scale"]
         )
-        
-        length = len(dataset)
-        
-        tr_range = range(0, int(length * 0.8))
-        vl_range = range(int(length * 0.8), int(length * 0.9))
-        te_range = range(int(length * 0.9), length)
-
-        
-        tr_dataset = Subset(dataset, tr_range)
-        vl_dataset = Subset(dataset, vl_range)
-        te_dataset = Subset(dataset, te_range)
-        # We consider 7200 samples for training, 1800 samples for validation and 1015 samples for testing
-        # !cat ~/deeplearning/skin/Prepare_HAM10000.py
+        vl_dataset = LIDC_loader(
+            mode="vl",
+            data_dir=config["dataset"]["data_dir"],
+            one_hot=False,
+            image_size=config["dataset"]["input_size"],
+            # aug_empty=AUGT.get_val_test(),
+            # transform=AUGT.get_spatial_transform(),
+            img_transform=DT.get_forward_transform_img(),
+            msk_transform=DT.get_forward_transform_msk(),
+            add_boundary_mask=config["dataset"]["add_boundary_mask"],
+            add_boundary_dist=config["dataset"]["add_boundary_dist"],
+            logger=logger,
+            data_scale=config["dataset"]["data_scale"]
+        )
+        te_dataset = LIDC_loader(
+            mode="te",
+            data_dir=config["dataset"]["data_dir"],
+            one_hot=False,
+            image_size=config["dataset"]["input_size"],
+            # aug_empty=AUGT.get_val_test(),
+            # transform=AUGT.get_spatial_transform(),
+            img_transform=DT.get_forward_transform_img(),
+            msk_transform=DT.get_forward_transform_msk(),
+            add_boundary_mask=config["dataset"]["add_boundary_mask"],
+            add_boundary_dist=config["dataset"]["add_boundary_dist"],
+            logger=logger,
+            data_scale=config["dataset"]["data_scale"]
+        )
     else:
-        message = "In the config file, `dataset>class_name` should be in: ['HAM10000Dataset', 'HAM10000DatasetFast']"
+        message = "In the config file, `dataset>class_name` should be in: ['LIDC_loader']"
         if logger: 
             logger.exception(message)
         else:

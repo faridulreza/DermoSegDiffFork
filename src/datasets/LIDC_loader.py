@@ -54,7 +54,8 @@ class LIDC_loader(Dataset):
 
 
         data_preparer = PrepareLIDC(
-            data_dir=self.data_dir, image_size=self.image_size, logger=logger
+            data_dir=self.data_dir, image_size=self.image_size, logger=logger,
+            mode=mode
         )
         data = data_preparer.get_data()
         X, Y = data["x"], data["y"]
@@ -161,7 +162,7 @@ class LIDC_loader(Dataset):
 
 
 class PrepareLIDC:
-    def __init__(self, data_dir, image_size, logger=None, **kwargs):
+    def __init__(self, data_dir, image_size, logger=None,mode, **kwargs):
         self.print = logger.info if logger else print
         
         self.data_dir = data_dir
@@ -173,6 +174,7 @@ class PrepareLIDC:
         self.input_fex = "png"
         self.data_dir = self.data_dir
         self.npy_dir = os.path.join(self.data_dir, "np")
+        self.mode = mode
 
     def __get_data_path(self):
         x_path = f"{self.npy_dir}/X_tr_{self.image_size}x{self.image_size}.npy"
@@ -217,6 +219,7 @@ class PrepareLIDC:
         return True
 
     def prepare_data(self):
+        
 
         imgs_dir = os.path.join(self.data_dir, "Image")
         msks_dir = os.path.join(self.data_dir, "Masks")
@@ -228,19 +231,30 @@ class PrepareLIDC:
             lambda x: imgs_dir+ x + '.png')
         meta['mask_image'] = meta['mask_image'].apply(
             lambda x: msks_dir + x + '.png')
+
+        if self.mode == "tr":
+            meta = meta[meta['data_split'] == 'Train']
+        elif self.mode == "vl":
+            meta = meta[meta['data_split'] == 'Validation']
+        elif self.mode == "te":
+            meta = meta[meta['data_split'] == 'Test']
+        else:
+            raise ValueError()
+        
         data_path = self.__get_data_path()
 
         # Parameters
         self.transforms = self.__get_transforms()
 
-        
+        train_image_paths = list(meta['original_image'])
+        train_mask_paths = list(meta['mask_image'])
 
         # gathering images
         imgs = []
         msks = []
-        for row in tqdm(meta):
-            img = self.__get_img_by_id(row['original_image'])
-            msk = self.__get_msk_by_id(row['mask_image'])
+        for img_path, mask_path in tqdm(zip(train_image_paths, train_mask_paths)):
+            img = self.__get_img_by_id(image_path)
+            msk = self.__get_msk_by_id(mask_path)
 
             img = self.transforms["img"](img)
             img = (img - img.min()) / (img.max() - img.min())
