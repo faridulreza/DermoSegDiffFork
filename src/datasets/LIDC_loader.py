@@ -227,9 +227,9 @@ class PrepareLIDC:
         meta = pd.read_csv(os.path.join(self.data_dir,'meta.csv'))
 
         meta['original_image'] = meta['original_image'].apply(
-            lambda x: imgs_dir+ x + '.png')
+            lambda x: imgs_dir+'/'+ x + '.png')
         meta['mask_image'] = meta['mask_image'].apply(
-            lambda x: msks_dir + x + '.png')
+            lambda x: msks_dir+'/'+ x + '.png')
 
         if self.mode == "tr":
             meta = meta[meta['data_split'] == 'Train']
