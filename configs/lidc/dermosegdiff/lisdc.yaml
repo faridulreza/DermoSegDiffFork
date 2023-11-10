@@ -1,5 +1,5 @@
 run:
-  device: 'gpu'
+  device: 'cuda'
   save_imgs: "saved_imgs"
   writer_dir: "/content/result/runs/LIDC" # tensorboard runs
   continue_training: false # whether to continue the training from the last epoch it was saved
@@ -31,7 +31,7 @@ dataset:
   input_size: 128
   name: "LIDC"
   class_name: "LIDC_loader" # do not change it unless you implement a new. this <Fast> class loads all files into ram at once to speed up data loading.
-  data_dir: "/content/data_Image/" # inside of this folder must exist <images> and <masks> folders. Inside of this folder the required numpy files will create inside of <np> folder.
+  data_dir: "/content/data_Image" # inside of this folder must exist <images> and <masks> folders. Inside of this folder the required numpy files will create inside of <np> folder.
   number_classes: 2
   img_channels: 3
   msk_channels: 1

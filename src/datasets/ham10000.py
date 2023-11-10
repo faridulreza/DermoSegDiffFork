@@ -85,17 +85,6 @@ class HAM10000DatasetFast(Dataset):
         else:
             raise ValueError()  
 
-#         if mode == "tr":
-#             self.imgs = X[0:7200]
-#             self.msks = Y[0:7200]
-#         elif mode == "vl":
-#             self.imgs = X[7200 : 7200 + 1800]
-#             self.msks = Y[7200 : 7200 + 1800]
-#         elif mode == "te":
-#             self.imgs = X[7200 + 1800 : 10015]
-#             self.msks = Y[7200 + 1800 : 10015]
-#         else:
-#             raise ValueError()
 
     def __len__(self):
         return len(self.imgs)
@@ -144,9 +133,7 @@ class HAM10000DatasetFast(Dataset):
             distance_map = np_normalize(distance_map)
             msk = torch.concatenate([msk, torch.tensor(distance_map).unsqueeze(0)], dim=0)
         
-#         img = torch.tensor(img, dtype=torch.float64)
-#         msk = torch.tensor(msk, dtype=torch.float64)
-        
+
         if self.img_transform:
             img = self.img_transform(img)
         if self.msk_transform:
