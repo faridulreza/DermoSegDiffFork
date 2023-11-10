@@ -17,6 +17,7 @@ def get_lidc(config, logger=None, verbose=False):
     img_dir = "Image"
     msk_dir = "Mask"
     img_path_list = glob.glob(f"{config['dataset']['data_dir']}/{img_dir}/*.png")
+    # print(img_path_list)
     
     pixel_level_transform = AUGT.get_pixel_level_transform(config["augmentation"], img_path_list=img_path_list)
     spacial_level_transform = AUGT.get_spacial_level_transform(config["augmentation"])
@@ -32,8 +33,8 @@ def get_lidc(config, logger=None, verbose=False):
             data_dir=config["dataset"]["data_dir"],
             one_hot=False,
             image_size=config["dataset"]["input_size"],
-            aug=tr_aug_transform,
-            # aug=AUGT.get_aug_policy_3(),
+            # aug=tr_aug_transform,
+            aug=AUGT.get_aug_policy_3(),
             # transform=AUGT.get_spatial_transform(),
             img_transform=DT.get_forward_transform_img(),
             msk_transform=DT.get_forward_transform_msk(),
