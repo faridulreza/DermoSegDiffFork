@@ -29,6 +29,7 @@ def get_ham10000(config, logger=None, verbose=False):
     if config["dataset"]["class_name"] == "HAM10000Dataset":
 
         dataset = HAM10000Dataset(
+            mode="tr",
             data_dir=config["dataset"]["data_dir"],
             one_hot=False,
             # aug=AUGT.get_aug_policy_3(),
