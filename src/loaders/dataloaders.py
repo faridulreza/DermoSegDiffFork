@@ -1,7 +1,9 @@
 from loaders.ph2 import get_ph2
 from loaders.isic2018 import get_isic2018
 from loaders.ham10000 import get_ham10000
+from loaders.lidc import get_lidc
 from common.logging import get_logger
+
 
 
 def get_dataloaders(config, mode_or_modes):
