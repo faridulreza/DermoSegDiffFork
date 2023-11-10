@@ -54,8 +54,7 @@ class LIDC_loader(Dataset):
 
 
         data_preparer = PrepareLIDC(
-            data_dir=self.data_dir, image_size=self.image_size, logger=logger,
-            mode=mode
+            data_dir=self.data_dir, image_size=self.image_size,   mode=mode, logger=logger  
         )
         data = data_preparer.get_data()
         X, Y = data["x"], data["y"]
@@ -162,7 +161,7 @@ class LIDC_loader(Dataset):
 
 
 class PrepareLIDC:
-    def __init__(self, data_dir, image_size, logger=None,mode, **kwargs):
+    def __init__(self, data_dir, image_size, mode , logger=None, **kwargs):
         self.print = logger.info if logger else print
         
         self.data_dir = data_dir
