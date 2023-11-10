@@ -39,17 +39,17 @@ dataset:
 
 data_loader:
   train: 
-    batch_size: 4
+    batch_size: 8
     shuffle: true
     # num_workers: 16
     pin_memory: true
   validation: 
-    batch_size: 4
+    batch_size: 8
     shuffle: false
     # num_workers: 16
     pin_memory: true
   test:
-    batch_size: 4
+    batch_size: 8
     shuffle: false
     # num_workers: 16
     pin_memory: false
