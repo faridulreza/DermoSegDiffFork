@@ -14,8 +14,8 @@ def get_lidc(config, logger=None, verbose=False):
     DT = DiffusionTransform((INPUT_SIZE, INPUT_SIZE))
     AUGT = DataAugmentationTransform((INPUT_SIZE, INPUT_SIZE))
     
-    img_dir = "Images"
-    msk_dir = "Masks"
+    img_dir = "Image"
+    msk_dir = "Mask"
     img_path_list = glob.glob(f"{config['dataset']['data_dir']}/{img_dir}/*.png")
     
     pixel_level_transform = AUGT.get_pixel_level_transform(config["augmentation"], img_path_list=img_path_list)
