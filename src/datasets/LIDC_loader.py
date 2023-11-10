@@ -14,6 +14,7 @@ from utils.helper_funcs import (
     calc_distance_map,
     normalize
 )
+import pandas as pd;
 
 np_normalize = lambda x: (x-x.min())/(x.max()-x.min())
 
@@ -36,7 +37,7 @@ class LIDC_loader(Dataset):
         self.print=logger.info if logger else print
         
         # pre-set variables
-        self.data_dir = data_dir if data_dir else "/path/to/datasets/HAM10000"
+        self.data_dir = data_dir if data_dir else "/content"
 
         # input parameters
         self.one_hot = one_hot
@@ -169,7 +170,7 @@ class PrepareLIDC:
         self.data_prefix = "ISIC_"
         self.target_postfix = "_segmentation"
         self.target_fex = "png"
-        self.input_fex = "jpg"
+        self.input_fex = "png"
         self.data_dir = self.data_dir
         self.npy_dir = os.path.join(self.data_dir, "np")
 
@@ -179,18 +180,13 @@ class PrepareLIDC:
         return {"x": x_path, "y": y_path}
 
     def __get_img_by_id(self, id):
-        img_dir = os.path.join(
-            self.imgs_dir, f"{self.data_prefix}{id}.{self.input_fex}"
-        )
-        img = read_image(img_dir, ImageReadMode.RGB)
+        
+        img = read_image(id, ImageReadMode.RGB)
         return img
 
     def __get_msk_by_id(self, id):
-        msk_dir = os.path.join(
-            self.msks_dir,
-            f"{self.data_prefix}{id}{self.target_postfix}.{self.target_fex}",
-        )
-        msk = read_image(msk_dir, ImageReadMode.GRAY)
+       
+        msk = read_image(id, ImageReadMode.GRAY)
         return msk
 
     def __get_transforms(self):
@@ -221,26 +217,30 @@ class PrepareLIDC:
         return True
 
     def prepare_data(self):
+
+        imgs_dir = os.path.join(self.data_dir, "Image")
+        msks_dir = os.path.join(self.data_dir, "Masks")
+
+
+        meta = pd.read_csv(os.path.join(self.data_dir,'meta.csv'))
+
+        meta['original_image'] = meta['original_image'].apply(
+            lambda x: imgs_dir+ x + '.png')
+        meta['mask_image'] = meta['mask_image'].apply(
+            lambda x: msks_dir + x + '.png')
         data_path = self.__get_data_path()
 
         # Parameters
         self.transforms = self.__get_transforms()
 
-        self.imgs_dir = os.path.join(self.data_dir, "images")
-        self.msks_dir = os.path.join(self.data_dir, "masks")
-
-        self.img_dirs = glob.glob(f"{self.imgs_dir}/*.{self.input_fex}")
-        self.data_ids = [
-            d.split(self.data_prefix)[1].split(f".{self.input_fex}")[0]
-            for d in self.img_dirs
-        ]
+        
 
         # gathering images
         imgs = []
         msks = []
-        for data_id in tqdm(self.data_ids):
-            img = self.__get_img_by_id(data_id)
-            msk = self.__get_msk_by_id(data_id)
+        for row in tqdm(meta):
+            img = self.__get_img_by_id(row['original_image'])
+            msk = self.__get_msk_by_id(row['mask_image'])
 
             img = self.transforms["img"](img)
             img = (img - img.min()) / (img.max() - img.min())
