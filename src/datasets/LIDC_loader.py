@@ -62,41 +62,10 @@ class LIDC_loader(Dataset):
         X = torch.tensor(X)
         Y = torch.tensor(Y)
         
-        if kwargs.get('data_scale', 'full') == 'full':
-            tr_length, vl_length = 7200, 1800
-            
-        elif kwargs.get('data_scale') == 'medium':
-            tr_length, vl_length = 7200//5, 1800
-        elif kwargs.get('data_scale') == 'lite':
-            tr_length, vl_length = 7200//10, 1800
-        elif kwargs.get('data_scale') == 'ultra-lite':
-            tr_length, vl_length = 7200//20, 1800
-        else:
-            raise ValueError(f"the value of <data_scale> param ({kwargs.get('data_scale')}) is dataset is invalid. valid in (full, medium, lite, ultra-lite)")
-          
-        if mode == "tr":
-            self.imgs = X[:tr_length]
-            self.msks = Y[:tr_length]
-        elif mode == "vl":
-            self.imgs = X[7200:7200 + vl_length]
-            self.msks = Y[7200:7200 + vl_length]
-        elif mode == "te":
-            self.imgs = X[7200 + vl_length :]
-            self.msks = Y[7200 + vl_length :]
-        else:
-            raise ValueError()  
+        self.imgs = X
+        self.msks = Y
+        
 
-#         if mode == "tr":
-#             self.imgs = X[0:7200]
-#             self.msks = Y[0:7200]
-#         elif mode == "vl":
-#             self.imgs = X[7200 : 7200 + 1800]
-#             self.msks = Y[7200 : 7200 + 1800]
-#         elif mode == "te":
-#             self.imgs = X[7200 + 1800 : 10015]
-#             self.msks = Y[7200 + 1800 : 10015]
-#         else:
-#             raise ValueError()
 
     def __len__(self):
         return len(self.imgs)
