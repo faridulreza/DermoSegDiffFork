@@ -232,7 +232,7 @@ class PrepareLIDC:
             lambda x: msks_dir+'/'+ x + '.png')
         
         
-        print("mode shape: ", self.mode.shape)
+        print("mode shape: ", self.mode)
         if self.mode == "tr":
             meta = meta[meta['data_split'] == 'Train']
         elif self.mode == "vl":
