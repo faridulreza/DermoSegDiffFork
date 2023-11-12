@@ -176,8 +176,8 @@ class PrepareLIDC:
         self.mode = mode
 
     def __get_data_path(self):
-        x_path = f"{self.npy_dir}/X_tr_{self.image_size}x{self.image_size}.npy"
-        y_path = f"{self.npy_dir}/Y_tr_{self.image_size}x{self.image_size}.npy"
+        x_path = f"{self.npy_dir}/X_tr_{self.image_size}x{self.image_size}_{self.mode}.npy"
+        y_path = f"{self.npy_dir}/Y_tr_{self.image_size}x{self.image_size}_{self.mode}.npy"
         return {"x": x_path, "y": y_path}
 
     def __get_img_by_id(self, id):
@@ -230,7 +230,9 @@ class PrepareLIDC:
             lambda x: imgs_dir+'/'+ x + '.png')
         meta['mask_image'] = meta['mask_image'].apply(
             lambda x: msks_dir+'/'+ x + '.png')
-
+        
+        
+        print("mode shape: ", self.mode.shape)
         if self.mode == "tr":
             meta = meta[meta['data_split'] == 'Train']
         elif self.mode == "vl":
