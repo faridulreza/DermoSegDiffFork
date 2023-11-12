@@ -264,6 +264,5 @@ class PrepareLIDC:
         self.print("Loading...")
         X = np.load(data_path["x"])
         Y = np.load(data_path["y"])
-        self.print("Loaded X and Y npy format.","X shape: ", X.shape, "Y shape: ", Y.shape)
-
+        
         return {"x": X, "y": Y}
